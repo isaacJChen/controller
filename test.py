@@ -1,4 +1,6 @@
 import azure.cognitiveservices.speech as speechsdk
+import keyboard
+import re
 
 # Creates an instance of a speech config with specified subscription key and service region.
 # Replace with your own subscription key and service region (e.g., "westus").
@@ -21,7 +23,9 @@ result = speech_recognizer.recognize_once()
 
 # Checks result.
 if result.reason == speechsdk.ResultReason.RecognizedSpeech:
-    print("Recognized: {}".format(result.text))
+    text  = re.sub(r'[^\w\s]','',result.text.lower())
+    keyboard.write(text)
+    keyboard.press_and_release('enter')
 elif result.reason == speechsdk.ResultReason.NoMatch:
     print("No speech could be recognized: {}".format(result.no_match_details))
 elif result.reason == speechsdk.ResultReason.Canceled:
